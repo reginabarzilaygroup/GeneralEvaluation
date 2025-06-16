@@ -103,3 +103,23 @@ This project is licensed under the MIT License. See the `LICENSE` file for more 
 
 - Streamlit for providing an easy-to-use framework for building web apps.
 - The developers of Mirai and Sybil for their contributions to risk prediction models.
+
+## Troubleshooting
+
+- **Global streamlit installation**
+  - **Problem**: A global streamlit installation interferes with the local namespace, causing streamlit to fail at recognizing additional local dependencies. This might result in an error such as the following:
+      ```
+    ModuleNotFoundError: No module named 'matplotlib'
+    Traceback:
+    File "./GeneralEvaluation/general_eval/app.py", line 24, in <module>
+    from general_eval.main import run_full_eval, DIAGNOSIS_DAYS_COL, FOLLOWUP_DAYS_COL
+    File "./GeneralEvaluation/general_eval/main.py", line 14, in <module>
+    from matplotlib import pyplot as plt
+     ```
+  - **Solution**: 
+    -   Depending on your installation method, uninstall your global streamlit instance with ```pipx uninstall streamlit``` \
+         or (in a new venv free terminal) ```pip uninstall streamlit```
+    -   Re-install 'General Evaluation' ```pipx install . --force``` \
+     or ```pip install .```
+     
+
