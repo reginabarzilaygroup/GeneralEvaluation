@@ -435,3 +435,51 @@ def plot_calibration_curve(input_df, true_col, pred_col, fig_name):
     plt.tight_layout()
 
     return fig
+
+
+def create_table_percentiles(split_df, pred_col, true_col, fig_name) -> plt.Figure:
+    """
+    Create a table of percentiles for the predicted probabilities.
+    So basically a histogram but in table form.
+    :param split_df:
+    :param pred_col:
+    :param true_col:
+    :param fig_name:
+    :return:
+    """
+
+    percentiles = np.array([1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99]).astype(int)
+    pred_values = split_df[pred_col].values
+    perc_values = np.percentile(pred_values, percentiles)
+    perc_values = np.round(perc_values, 4)
+    # Ensure percentiles are displayed as integers (no trailing .0)
+    perc_df = pd.DataFrame({
+        "Percentile": percentiles.astype(str),
+        "Score": perc_values,
+    })
+
+    # Create a figure and axis
+    fig, ax = plt.subplots(figsize=(6, 7))  # Adjust the size as needed
+    # Create the table
+    table = ax.table(cellText=perc_df.values,
+                     colLabels=perc_df.columns,
+                     cellLoc='center', loc='center')
+
+    df = perc_df.copy()
+    col_width = 1.0 / df.shape[1]
+    col_height = 0.09
+    # table.auto_set_font_size(False)
+    for key, cell in table.get_celld().items():
+        if key[0] == 0:
+            cell.set_text_props(fontweight='bold')
+        cell.set_width(col_width)
+        cell.set_height(col_height)
+
+    # Remove axis and set tight layout
+    ax.axis('off')
+    plt.subplots_adjust(top=0.8, bottom=0.1)
+    # Set the title at the top of the figure
+    fig.suptitle(f"{fig_name} Prediction Score Percentiles", y=0.98, fontweight='bold')
+
+    return fig
+

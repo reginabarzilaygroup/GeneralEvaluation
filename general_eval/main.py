@@ -672,6 +672,11 @@ def run_full_eval(ds_name, input_path, category_name="Year", subgroups=(), sensi
             print(traceback.format_exc())
             continue
 
+        ### TABLE
+        # Table of percentiles of predictions
+        fig = gel.create_table_percentiles(split_df, pred_col, true_col, fig_name)
+        _save_and_close_fig(pdf_pages, fig)
+
         ### FIGURE
         # Calibration plot
         fig = gel.plot_calibration_curve(split_df, true_col, pred_col, fig_name)
